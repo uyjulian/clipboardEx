@@ -1,5 +1,5 @@
 #include "ncbind/ncbind.hpp"
-#include "../json/Writer.hpp"
+#include "json/Writer.hpp"
 #include <vector>
 #include <algorithm>
 

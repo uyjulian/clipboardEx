@@ -1,0 +1,8 @@
+[submodule "external/ncbind"]
+	path = external/ncbind
+	url = https://github.com/uyjulian/ncbind.git
+	branch = mingw
+[submodule "external/json"]
+	path = external/json
+	url = https://github.com/uyjulian/json.git
+	branch = mingw
