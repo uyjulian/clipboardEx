@@ -761,24 +761,19 @@ static void RegistCallback(void)
 // 登録
 NCB_PRE_REGIST_CALLBACK(RegistCallback);
 
-
-//----------------------------------------------------------------------
-// DLL解放時に呼び出すファンクション
-//----------------------------------------------------------------------
-static void TJS_USERENTRY tryDeleteConst(void *data)
-{
-  // 定数を削除
-  TVPExecuteScript(L"delete global[\"cbfBitmap\"];");
-  TVPExecuteScript(L"delete global[\"cbfTJS\"];");
-}
-
-static bool TJS_USERENTRY catchDeleteConst(void *data, const tTVPExceptionDesc & desc) {
-  return false;
-}
-
 static void UnregistCallback(void)
 {
-  TVPDoTryBlock(&tryDeleteConst, &catchDeleteConst, NULL, NULL);
+  // 定数を削除
+  iTJSDispatch2 *globalDispatch = TVPGetScriptDispatch();
+  if (globalDispatch)
+  {
+    tTJSVariant varGlobal(globalDispatch);
+    globalDispatch->Release();
+    tTJSVariantClosure cloGlobal = varGlobal.AsObjectClosureNoAddRef();
+    cloGlobal.DeleteMember(0, TJS_W("cbfBitmap"), NULL, cloGlobal.Object);
+    cloGlobal.DeleteMember(0, TJS_W("cbfTJS"), NULL, cloGlobal.Object);
+  }
+
   // Array.countを解放
   if (ArrayCountProp) {
     ArrayCountProp->Release();
